@@ -36,6 +36,14 @@ export default function Admin() {
   };
 
   useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdmin(!!session);
+      setLoadingAuth(false);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
     if (isAdmin) {
       refreshData();
       setApiKey(getApiKey());

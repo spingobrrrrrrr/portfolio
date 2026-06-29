@@ -13,7 +13,7 @@ const letterVariant = {
     transition: {
       delay: 0.3 + i * 0.08,
       duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
 };
