@@ -1,8 +1,16 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowRight, PlayCircle, Smartphone, Mail, MonitorPlay, Image as ImageIcon, Film } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  PlayCircle,
+  Smartphone,
+  Mail,
+  MonitorPlay,
+  Image as ImageIcon,
+  Film,
+} from "lucide-react";
 
-const nameLetters = 'Alexandre Noury.'.split('');
+const nameLetters = "Alexandre Noury.".split("");
 
 const letterVariant = {
   hidden: { opacity: 0, y: 60, rotateX: -40 },
@@ -19,28 +27,35 @@ const letterVariant = {
 };
 
 const marqueeItems = [
-  'Montage Long', 'YouTube Shorts', 'Miniatures', 'Étalonnage',
-  'Motion Design', 'Storytelling', 'Montage Long', 'YouTube Shorts',
-  'Miniatures', 'Étalonnage', 'Motion Design', 'Storytelling',
+  "Montage Long",
+  "YouTube Shorts",
+  "Miniatures",
+  "Motion Design",
+  "Storytelling",
+  "Montage Long",
+  "YouTube Shorts",
+  "Miniatures",
+  "Motion Design",
+  "Storytelling",
 ];
 
 const cards = [
   {
-    to: '/longs',
-    label: 'Vidéos longues',
-    desc: 'Montage narratif, étalonnage, rendu final.',
+    to: "/longs",
+    label: "Vidéos longues",
+    desc: "Montage narratif, étalonnage, rendu final.",
     Icon: MonitorPlay,
   },
   {
-    to: '/miniatures',
-    label: 'Miniatures',
-    desc: 'Design graphique, thumbnails YouTube qui convertissent.',
+    to: "/miniatures",
+    label: "Miniatures",
+    desc: "Design graphique, thumbnails YouTube qui convertissent.",
     Icon: ImageIcon,
   },
   {
-    to: '/shorts',
-    label: 'Shorts',
-    desc: 'Formats courts viraux, reels, édits dynamiques.',
+    to: "/shorts",
+    label: "Shorts",
+    desc: "Formats courts viraux, reels, édits dynamiques.",
     Icon: Film,
   },
 ];
@@ -48,20 +63,18 @@ const cards = [
 export default function Home() {
   return (
     <div className="flex flex-col gap-20 py-10">
-
       {/* Hero */}
       <div className="space-y-8 max-w-5xl">
-
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: 'easeOut' }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
           className="text-amber-500 text-xs font-semibold tracking-[0.22em] uppercase"
         >
-          Créateur · Monteur Vidéo
+          Monteur Vidéo & MiniaMaker
         </motion.p>
 
-        <div style={{ perspective: '700px' }} className="overflow-visible">
+        <div style={{ perspective: "700px" }} className="overflow-visible">
           <div className="flex items-end gap-[0.02em] leading-[0.85] text-[clamp(5rem,13vw,9rem)] font-bold tracking-tighter">
             {nameLetters.map((letter, i) => (
               <motion.span
@@ -71,11 +84,13 @@ export default function Home() {
                 initial="hidden"
                 animate="visible"
                 className={`inline-block select-none ${
-                  letter === '.'
-                    ? 'text-amber-500'
-                    : 'text-white hover:text-zinc-200 transition-colors cursor-default'
+                  letter === "."
+                    ? "text-amber-500"
+                    : "text-white hover:text-zinc-200 transition-colors cursor-default"
                 }`}
-                whileHover={letter !== '.' ? { y: -8, transition: { duration: 0.2 } } : {}}
+                whileHover={
+                  letter !== "." ? { y: -8, transition: { duration: 0.2 } } : {}
+                }
               >
                 {letter}
               </motion.span>
@@ -86,17 +101,17 @@ export default function Home() {
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.75, ease: 'easeOut' }}
+          transition={{ duration: 0.55, delay: 0.75, ease: "easeOut" }}
           className="text-lg md:text-xl text-zinc-400 max-w-lg leading-relaxed"
         >
-          Je transforme tes idées en vidéos qui captivent — montage percutant,
+          Je transforme tes idées en vidéos qui captivent. Montage percutant,
           miniatures qui convertissent, formats courts viraux.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.0, ease: 'easeOut' }}
+          transition={{ duration: 0.5, delay: 1.0, ease: "easeOut" }}
           className="flex flex-wrap gap-3"
         >
           <Link
@@ -122,7 +137,6 @@ export default function Home() {
             Contact
           </a>
         </motion.div>
-
       </div>
 
       {/* Marquee */}
@@ -149,7 +163,7 @@ export default function Home() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.0, duration: 0.6, ease: 'easeOut' }}
+        transition={{ delay: 1.0, duration: 0.6, ease: "easeOut" }}
         className="grid grid-cols-1 sm:grid-cols-3 gap-4"
       >
         {cards.map(({ to, label, desc, Icon }) => (
@@ -167,7 +181,6 @@ export default function Home() {
           </Link>
         ))}
       </motion.div>
-
     </div>
   );
 }

@@ -144,7 +144,7 @@ export default function Layout() {
           <span className="text-zinc-600 text-sm">
             © {new Date().getFullYear()}{' '}
             <span className="text-amber-500 font-semibold">Alexandre Noury</span>
-            {' '}— Créateur & Monteur Vidéo
+            {' '}- Monteur Vidéo & MiniaMaker
           </span>
           <a
             href="mailto:alexandrenoury17@gmail.com"

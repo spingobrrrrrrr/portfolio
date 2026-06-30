@@ -10,6 +10,8 @@ export default function Admin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [resetMode, setResetMode] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   const [videos, setVideos] = useState<Video[]>([]);
   const [miniatures, setMiniatures] = useState<Miniature[]>([]);
@@ -76,6 +78,16 @@ export default function Admin() {
     await supabase.auth.signOut();
   };
 
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    await supabase.auth.resetPasswordForEmail(email.toLowerCase(), {
+      redirectTo: `${window.location.origin}/admin`,
+    });
+    setResetSent(true);
+    setLoading(false);
+  };
+
   if (loading_auth) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -91,43 +103,96 @@ export default function Admin() {
           <div className="bg-blue-500/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <Lock className="w-8 h-8 text-blue-500" />
           </div>
-          <h2 className="text-2xl font-bold text-center text-white mb-2">Accès Restreint</h2>
+          <h2 className="text-2xl font-bold text-center text-white mb-2">
+            {resetMode ? 'Réinitialiser le mot de passe' : 'Accès Restreint'}
+          </h2>
           <p className="text-slate-400 text-center mb-8 text-sm">
-            Veuillez vous connecter pour accéder à l'interface d'administration.
+            {resetMode
+              ? 'Entrez votre adresse mail pour recevoir un lien de réinitialisation.'
+              : 'Veuillez vous connecter pour accéder à l\'interface d\'administration.'}
           </p>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <input
-                type="email"
-                placeholder="Adresse mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full bg-slate-900 border ${loginError ? 'border-red-500' : 'border-slate-700'} rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors`}
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="password"
-                placeholder="Mot de passe"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={`w-full bg-slate-900 border ${loginError ? 'border-red-500' : 'border-slate-700'} rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors`}
-                required
-              />
-              {loginError && (
-                <p className="text-red-500 text-xs mt-1 ml-1 font-medium">
-                  Accès refusé. Identifiants incorrects.
+
+          {resetMode ? (
+            resetSent ? (
+              <div className="text-center space-y-4">
+                <p className="text-green-400 font-medium text-sm">
+                  Email envoyé ! Vérifie ta boîte mail.
                 </p>
-              )}
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold text-white transition-all transform active:scale-95"
-            >
-              Se connecter
-            </button>
-          </form>
+                <button
+                  onClick={() => { setResetMode(false); setResetSent(false); }}
+                  className="text-slate-400 hover:text-white text-sm underline underline-offset-2 transition-colors"
+                >
+                  Retour à la connexion
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleResetPassword} className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Adresse mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold text-white transition-all transform active:scale-95 disabled:opacity-50"
+                >
+                  {loading ? 'Envoi...' : 'Envoyer le lien'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResetMode(false)}
+                  className="w-full text-slate-400 hover:text-white text-sm py-2 transition-colors"
+                >
+                  Retour à la connexion
+                </button>
+              </form>
+            )
+          ) : (
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <input
+                  type="email"
+                  placeholder="Adresse mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`w-full bg-slate-900 border ${loginError ? 'border-red-500' : 'border-slate-700'} rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors`}
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Mot de passe"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`w-full bg-slate-900 border ${loginError ? 'border-red-500' : 'border-slate-700'} rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition-colors`}
+                  required
+                />
+                {loginError && (
+                  <p className="text-red-500 text-xs mt-1 ml-1 font-medium">
+                    Accès refusé. Identifiants incorrects.
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => { setResetMode(true); setLoginError(false); }}
+                  className="text-slate-500 hover:text-slate-300 text-xs mt-2 ml-1 transition-colors"
+                >
+                  Mot de passe oublié ?
+                </button>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold text-white transition-all transform active:scale-95"
+              >
+                Se connecter
+              </button>
+            </form>
+          )}
         </div>
       </div>
     );
